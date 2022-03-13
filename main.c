@@ -1,11 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-char* init_word(char word[]);
+char transform(char val);
 char* turn_wheel(char *wheel[]);
 int min(const int array[], int size);
-
+void show_stat(const char *name, int score, int turn);
 
 int main() {
 
@@ -13,55 +12,57 @@ int main() {
     printf("How many players are you (2 or 3) : ");
     scanf("%d", &players);
 
-    char player1[20]; // name of player 1
-    char player2[20]; // name of player 2
-    char player3[20]; // name of player 3
+    char *player1; // name of player 1
+    char *player2; // name of player 2
+    char *player3; // name of player 3
     char* players_names[players]; // array of all players names
-
-    int turn[players]; // array which stocks how many turns players have played
+    int num_turn[players]; // array which stocks how many turns players have played
     char wheel[] = {}; // the wheel
 
-    char *secret_word = "some random words"; // the word to guess
-    char *current_word = init_word(secret_word);
+    char secret_word[] = "some random words"; // the word to guess
+    int size = sizeof(secret_word);
+    char current_word[size];
+    for (int i = 0; i < size-1; i++) {
+        current_word[i] = transform(secret_word[i]);
+    }
+    printf("%s", current_word);
 
     for (int i = 0; i < players; i++) { // input of players names and setup of turn
         printf("\nPlease enter player %d name : ", i+1);
         if (i == 0) {
-            scanf("%s", player1);
-            turn[0] = 0;
+            scanf("%s", players_names[0]);
+            printf("%s", players_names[0]);
+            num_turn[0] = 0;
         }
         else if (i == 1) {
-            scanf("%s", player2);
-            turn[i] = 0;
+            scanf("%s", players_names[1]);
+            num_turn[i] = 0;
         }
         else {
-            scanf("%s", player3);
-            turn[i] = 0;
+            scanf("%s", players_names[2]);
+            num_turn[i] = 0;
         }
     }
 
-    printf("\nmin : %d", min(turn, players));
+    int turn;
+    while (1) {
+        turn = min(num_turn, players);
+        printf("It's ");
+
+        break;
+    }
+
     return 0;
 }
 
 // this shit doesn't work
-char* init_word(char word[]) {
-    char *init = "ok";
-
-    for (int i = 0; i < strlen(word); i++) {
-
-        switch (word[i]) {
-            case ' ':
-                init += ' ';
-                break;
-            case '-':
-                init += '-';
-                break;
-            default:
-                init += '_';
-        }
+char transform(const char val) {
+    if (val == '-' || val == ' ') {
+        return val;
     }
-    return init;
+    else {
+        return '_';
+    }
 }
 
 
@@ -73,6 +74,18 @@ int min(const int array[], int size) {
             min = i;
         }
     }
-
     return min;
+}
+
+void show_stat(const char *name, int score, int turn) {
+    printf("\n\n\n\n\n\n\n\n\n");
+    printf("=========================\n");
+    for (int i = 0; i < (25-strlen(name))/2; i++) {
+        printf("%c", ' ');
+    }
+    printf("%s \n", name);
+    printf("=========================\n\n");
+    printf(" score : %d \n", score);
+    printf(" turns played : %d \n\n", turn);
+    printf("=========================\n");
 }
